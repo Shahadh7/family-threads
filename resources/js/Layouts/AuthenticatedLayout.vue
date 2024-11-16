@@ -146,8 +146,8 @@ const currentActive = ref("Home");
                             Family Tree
                         </SideBarItem>
                         <SideBarItem
-                            :href="route('memory-items')"
-                            :active="route().current('memory-items')"
+                            :href="route('memory-items.index')"
+                            :active="route().current('memory-items.index') || route().current('memory-items.create')"
                         >
                             Memory Items
                         </SideBarItem>
