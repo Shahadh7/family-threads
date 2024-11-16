@@ -1,4 +1,6 @@
 <script setup>
+import ActionButton from "@/Components/ActionButton.vue";
+import MemoryItemCard from "@/Components/MemoryItemCard.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
@@ -19,7 +21,7 @@ const AllItems = ref([
         created_at: "2024-10-09",
         profile_picture: "/images/shahadh.png",
         media_type: 'image',
-        image: 'images/shahadh.png'
+        image: 'images/img-1.jpg'
     },  
     {
         id: 2,
@@ -30,7 +32,7 @@ const AllItems = ref([
         created_at: "2024-10-09",
         profile_picture: "/images/shahadh.png",
         media_type: 'image',
-        image: 'images/shahadh.png'
+        image: 'images/img-1.jpg'
     },  
     {
         id: 3,
@@ -41,7 +43,7 @@ const AllItems = ref([
         created_at: "2024-10-09",
         profile_picture: "/images/shahadh.png",
         media_type: 'image',
-        image: 'images/shahadh.png'
+        image: 'images/img-1.jpg'
     },  
     {
         id: 4,
@@ -52,7 +54,7 @@ const AllItems = ref([
         created_at: "2024-10-09",
         profile_picture: "/images/shahadh.png",
         media_type: 'image',
-        image: 'images/shahadh.png'
+        image: 'images/img-1.jpg'
     },  
     {
         id: 5,
@@ -63,7 +65,7 @@ const AllItems = ref([
         created_at: "2024-10-09",
         profile_picture: "/images/shahadh.png",
         media_type: 'image',
-        image: 'images/shahadh.png'
+        image: 'images/img-1.jpg'
 
     },
     {
@@ -75,7 +77,211 @@ const AllItems = ref([
         created_at: "2024-10-09",
         profile_picture: "/images/shahadh.png",
         media_type: 'image',
-        image: 'images/shahadh.png'
+        image: 'images/img-1.jpg'
+
+    },
+    {
+        id: 1,
+        title: "Memory Thread 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Memory Thread",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 2,
+        title: "Time Capsule 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 3,
+        title: "Keep Sake Item 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Keep Sake Item",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 4,
+        title: "Memory Thread 2",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Memory Thread",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 5,
+        title: "Time Capsule 2",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+
+    },
+    {
+        id: 6,
+        title: "Time Capsule 3",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+
+    },
+    {
+        id: 1,
+        title: "Memory Thread 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Memory Thread",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 2,
+        title: "Time Capsule 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 3,
+        title: "Keep Sake Item 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Keep Sake Item",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 4,
+        title: "Memory Thread 2",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Memory Thread",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 5,
+        title: "Time Capsule 2",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+
+    },
+    {
+        id: 6,
+        title: "Time Capsule 3",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+
+    },
+    {
+        id: 1,
+        title: "Memory Thread 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Memory Thread",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 2,
+        title: "Time Capsule 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 3,
+        title: "Keep Sake Item 1",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Keep Sake Item",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 4,
+        title: "Memory Thread 2",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Memory Thread",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+    },  
+    {
+        id: 5,
+        title: "Time Capsule 2",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/shahadh.png",
+        media_type: 'image',
+        image: 'images/img-1.jpg'
+
+    },
+    {
+        id: 6,
+        title: "Time Capsule 3",
+        description: 'lorem ipsum dolor sit amet',
+        thread_type: "Time Capsule",
+        created_by: "Shahadh",
+        created_at: "2024-10-09",
+        profile_picture: "/images/img-4.webp",
+        media_type: 'image',
+        image: 'images/img-4.webp'
 
     },
 ])
@@ -105,35 +311,44 @@ const filteredItems = computed(() => {
             <h2 class="text-3xl leading-tight text-gray-800">Memory Items</h2>
         </template>
 
-        <div class="flex gap-1 my-5">
-            <div
-                class="tag"
-                :class="{ 'tag-active': currentActive === 'Memory Threads' }"
-                @click="setActive('Memory Threads')"
-            >
-                <span :class="['text-xs', currentActive === 'Memory Threads' ? 'montserrat-bold' : 'montserrat-light']">Memory Threads</span>
+        <div class="flex justify-between items-center max-w-7xl border-b border-gray-200">
+            <div class="flex gap-1 my-5">
+                <div
+                    class="tag"
+                    :class="{ 'tag-active': currentActive === 'Memory Threads' }"
+                    @click="setActive('Memory Threads')"
+                >
+                    <span :class="['text-xs', currentActive === 'Memory Threads' ? 'montserrat-bold' : 'montserrat-light']">Memory Threads</span>
+                </div>
+                <div
+                    class="tag"
+                    :class="{ 'tag-active': currentActive === 'Keep Sake Items' }"
+                    @click="setActive('Keep Sake Items')"
+                >
+                    <span :class="['text-xs', currentActive === 'Keep Sake Items' ? 'montserrat-bold' : 'montserrat-light']">Keep Sake Items</span>
+                </div>
+                <div
+                    class="tag"
+                    :class="{ 'tag-active': currentActive === 'Time Capsules' }"
+                    @click="setActive('Time Capsules')"
+                >
+                    <span :class="['text-xs', currentActive === 'Time Capsules' ? 'montserrat-bold' : 'montserrat-light']">Time Capsules</span>
+                </div>
             </div>
-            <div
-                class="tag"
-                :class="{ 'tag-active': currentActive === 'Keep Sake Items' }"
-                @click="setActive('Keep Sake Items')"
-            >
-                <span :class="['text-xs', currentActive === 'Keep Sake Items' ? 'montserrat-bold' : 'montserrat-light']">Keep Sake Items</span>
-            </div>
-            <div
-                class="tag"
-                :class="{ 'tag-active': currentActive === 'Time Capsules' }"
-                @click="setActive('Time Capsules')"
-            >
-                <span :class="['text-xs', currentActive === 'Time Capsules' ? 'montserrat-bold' : 'montserrat-light']">Time Capsules</span>
-            </div>
+            <ActionButton class="px-1 py-1">+</ActionButton>
         </div>
-
         <div class="py-5">
-            <div class="max-w-5xl">
+            <div class="max-w-7xl">
                 <div
                     class="overflow-hidden shadow-sm sm:rounded-lg max-h-custom overflow-y-scroll"
                 >
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="row gap-5">
+                            <div class="col" v-for="item in filteredItems" :key="item.id">
+                                <MemoryItemCard :memoryItem="item" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,4 +375,15 @@ const filteredItems = computed(() => {
     text-decoration-color: #d9ce5b;
     color: #5b5b27;
 }
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.col {
+    display: flex;
+    width: 32%;
+}
+
 </style>

@@ -105,7 +105,7 @@ const filteredItems = computed(() => {
             <h2 class="text-3xl leading-tight text-gray-800">Home</h2>
         </template>
 
-        <div class="flex gap-1 my-5">
+        <div class="flex gap-1 my-5 border-b pb-3 border-gray-200 max-w-5xl">
             <div
                 class="tag"
                 :class="{ 'tag-active': currentActive === 'All Items' }"
