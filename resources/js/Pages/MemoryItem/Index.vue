@@ -2,7 +2,7 @@
 import ActionButton from "@/Components/ActionButton.vue";
 import MemoryItemCard from "@/Components/MemoryItemCard.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 
 const currentActive = ref("Memory Threads");
@@ -301,6 +301,10 @@ const filteredItems = computed(() => {
     }
 })
 
+const navigateToAddMemoryItem = () => {
+    router.get(route('memory-items.create'));
+}
+
 </script>
 
 <template>
@@ -335,7 +339,7 @@ const filteredItems = computed(() => {
                     <span :class="['text-xs', currentActive === 'Time Capsules' ? 'montserrat-bold' : 'montserrat-light']">Time Capsules</span>
                 </div>
             </div>
-            <ActionButton class="px-1 py-1">+</ActionButton>
+            <ActionButton class="px-1 py-1" @click="navigateToAddMemoryItem">+</ActionButton>
         </div>
         <div class="py-5">
             <div class="max-w-7xl">

@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ConnectionController;
+use App\Http\Controllers\MemoryItemController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -22,9 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/memory-items', function() {
-        return Inertia::render('MemoryItemsPage');
-    })->name('memory-items');
+
+
+    Route::get('/memory-item', [MemoryItemController::class, 'index'])->name('memory-items.index');
+    Route::get('/memory-item/create', [MemoryItemController::class, 'create'])->name('memory-items.create');
 });
 
 Route::get('/', [ConnectionController::class, 'show']);
