@@ -1,10 +1,8 @@
 <script setup>
-// import ActionButton from "@/Components/ActionButton.vue";
-// import MemoryItemCard from "@/Components/MemoryItemCard.vue";
 import MemoryItemForm from "@/Components/MemoryItemForm.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 const breadCrumbs = ref([
     {
@@ -13,16 +11,20 @@ const breadCrumbs = ref([
         href: "/memory-item",
     },
     {
-        title: "Add",
+        title: "Edit",
         disabled: true,
-        href: "/memory-item/create",
+        href: "/memory-item/edit",
     },
 ]);
+
+defineProps({
+    memoryItem: Object
+})
 
 </script>
 
 <template>
-    <Head title="Add Memory Item" />
+    <Head title="Dashboard" />
 
     <AuthenticatedLayout :name="$page.props.auth.user.name">
         <template #header>

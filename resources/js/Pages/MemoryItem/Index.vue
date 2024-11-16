@@ -81,7 +81,7 @@ const AllItems = ref([
 
     },
     {
-        id: 1,
+        id: 7,
         title: "Memory Thread 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Memory Thread",
@@ -92,7 +92,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 2,
+        id: 8,
         title: "Time Capsule 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -103,7 +103,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 3,
+        id: 9,
         title: "Keep Sake Item 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Keep Sake Item",
@@ -114,7 +114,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 4,
+        id: 10,
         title: "Memory Thread 2",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Memory Thread",
@@ -125,7 +125,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 5,
+        id: 11,
         title: "Time Capsule 2",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -137,7 +137,7 @@ const AllItems = ref([
 
     },
     {
-        id: 6,
+        id: 12,
         title: "Time Capsule 3",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -149,7 +149,7 @@ const AllItems = ref([
 
     },
     {
-        id: 1,
+        id: 13,
         title: "Memory Thread 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Memory Thread",
@@ -160,7 +160,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 2,
+        id: 14,
         title: "Time Capsule 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -171,7 +171,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 3,
+        id: 15,
         title: "Keep Sake Item 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Keep Sake Item",
@@ -182,7 +182,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 4,
+        id: 16,
         title: "Memory Thread 2",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Memory Thread",
@@ -193,7 +193,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 5,
+        id: 17,
         title: "Time Capsule 2",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -205,7 +205,7 @@ const AllItems = ref([
 
     },
     {
-        id: 6,
+        id: 18,
         title: "Time Capsule 3",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -217,7 +217,7 @@ const AllItems = ref([
 
     },
     {
-        id: 1,
+        id: 19,
         title: "Memory Thread 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Memory Thread",
@@ -228,7 +228,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 2,
+        id: 20,
         title: "Time Capsule 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -239,7 +239,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 3,
+        id: 21,
         title: "Keep Sake Item 1",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Keep Sake Item",
@@ -250,7 +250,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 4,
+        id: 22,
         title: "Memory Thread 2",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Memory Thread",
@@ -261,7 +261,7 @@ const AllItems = ref([
         image: 'images/img-1.jpg'
     },  
     {
-        id: 5,
+        id: 23,
         title: "Time Capsule 2",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -273,7 +273,7 @@ const AllItems = ref([
 
     },
     {
-        id: 6,
+        id: 24,
         title: "Time Capsule 3",
         description: 'lorem ipsum dolor sit amet',
         thread_type: "Time Capsule",
@@ -305,10 +305,14 @@ const navigateToAddMemoryItem = () => {
     router.get(route('memory-items.create'));
 }
 
+const removeItem = (id) => {
+    AllItems.value = AllItems.value.filter((item) => item.id !== id);
+}
+
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Memory Items" />
 
     <AuthenticatedLayout :name="$page.props.auth.user.name">
         <template #header>
@@ -341,15 +345,18 @@ const navigateToAddMemoryItem = () => {
             </div>
             <ActionButton class="px-1 py-1" @click="navigateToAddMemoryItem">+</ActionButton>
         </div>
+        <template v-if="filteredItems.length === 0">
+            <p class="my-5 text-md montserrat-light">No records available at the moment.</p>
+        </template>
         <div class="py-5">
             <div class="max-w-7xl">
                 <div
                     class="overflow-hidden shadow-sm sm:rounded-lg max-h-custom overflow-y-scroll"
                 >
-                    <div class="p-6 border-b border-gray-200">
+                    <div :class="['p-6 border-gray-200', filteredItems.length === 0 ? '' : 'border-b']">
                         <div class="row gap-5">
                             <div class="col" v-for="item in filteredItems" :key="item.id">
-                                <MemoryItemCard :memoryItem="item" />
+                                <MemoryItemCard :memoryItem="item" @removeItem="removeItem" />
                             </div>
                         </div>
                     </div>

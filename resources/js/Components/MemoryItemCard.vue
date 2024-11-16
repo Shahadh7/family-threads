@@ -1,6 +1,6 @@
 <script setup>
 import ActionButton from './ActionButton.vue';
-
+import { Link, router } from '@inertiajs/vue3';
 
 defineProps({
     memoryItem: {
@@ -9,18 +9,21 @@ defineProps({
     }
 })
 
+
 </script>
 <template>
     <div class="memory-item-card">
         <div class="memory-item-card-image relative">
             <img :src="memoryItem.image" alt="memory-item" />
             <div class="flex flex-col absolute gap-2 top-3 right-3">
-                <ActionButton :memoryItem="memoryItem" >
+                <ActionButton @click="$emit('removeItem', memoryItem.id)">
                     <span class="mdi mdi-close text-lg"></span>
                 </ActionButton>
-                <ActionButton :memoryItem="memoryItem">
-                    <span class="mdi mdi-pencil text-lg"></span>
-                </ActionButton>
+                <Link :href="route('memory-items.show', memoryItem.id)" >
+                    <ActionButton>
+                        <span class="mdi mdi-pencil text-lg"></span>
+                    </ActionButton>
+                </Link>
             </div>
         </div>
     </div>
