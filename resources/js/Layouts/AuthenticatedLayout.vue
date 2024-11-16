@@ -1,72 +1,71 @@
 <script setup>
-import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { ref, computed } from "vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import Dropdown from "@/Components/Dropdown.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
+import NavLink from "@/Components/NavLink.vue";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+import { Link } from "@inertiajs/vue3";
+import SideBarItem from "@/Components/SideBarItem.vue";
+// import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 
 const showingNavigationDropdown = ref(false);
+
+const props = defineProps({
+    image: {
+        type: String,
+        default: "", // Default to empty string if no image is provided
+    },
+    name: {
+        type: String,
+        required: true, // Ensure a name is always provided
+        default: "User",
+    },
+});
+
+const imageAvailable = ref(true);
+
+const firstLetter = computed(() => {
+    return props.name.charAt(0).toUpperCase(); // Get the first letter of the name
+});
+
+// Handle image error by showing the first letter instead
+const handleImageError = () => {
+    imageAvailable.value = false;
+};
+
+const currentActive = ref("Home");
+
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav
-                class="border-b border-gray-100 bg-white"
-            >
-                <!-- Primary Navigation Menu -->
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="min-h-screen">
+            <div class="nav-section flex justify-between">
+                <div class="w-full px-4 sm:px-6 lg:px-8 mt-3">
                     <div class="flex h-16 justify-between">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
-                                    />
-                                </Link>
-                            </div>
-
-                            <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
-                            >
-                                <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
-                                >
-                                    Dashboard
-                                </NavLink>
-                            </div>
-                        </div>
-
+                        <ApplicationLogo />
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {{ $page.props.auth.user.name }}
-
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
+                                            <template v-if="image">
+                                                <img
+                                                    :src="image"
+                                                    alt="Avatar"
+                                                    class="h-14 w-14 rounded-full object-cover border-4 border-solid border-black"
+                                                    @error="handleImageError"
+                                                />
+                                            </template>
+                                            <template v-else>
+                                                <span
+                                                    class="h-14 w-14 rounded-full flex items-center justify-center bg-gray-500 text-white font-bold border-4 border-solid border-black"
                                                 >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
+                                                    {{ firstLetter }}
+                                                </span>
+                                            </template>
                                         </span>
                                     </template>
 
@@ -130,69 +129,58 @@ const showingNavigationDropdown = ref(false);
                         </div>
                     </div>
                 </div>
-
-                <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{
-                        block: showingNavigationDropdown,
-                        hidden: !showingNavigationDropdown,
-                    }"
-                    class="sm:hidden"
-                >
-                    <div class="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
+            </div>
+            <div class="flex sm:px-6 lg:px-8 gap-8">
+                <div class="sidebar  border-r-2 h-96 my-12">
+                    <div class="flex flex-col gap-4">
+                        <SideBarItem
                             :href="route('dashboard')"
                             :active="route().current('dashboard')"
                         >
                             Dashboard
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <!-- Responsive Settings Options -->
-                    <div
-                        class="border-t border-gray-200 pb-1 pt-4"
-                    >
-                        <div class="px-4">
-                            <div
-                                class="text-base font-medium text-gray-800"
-                            >
-                                {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
-                            </div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
+                        </SideBarItem>
+                        <SideBarItem
+                            :href="route('password.request')"
+                            :active="route().current('password.request')"
+                        >
+                            Family Tree
+                        </SideBarItem>
+                        <SideBarItem
+                            :href="route('password.request')"
+                            :active="route().current('password.request')"
+                        >
+                            Memory Items
+                        </SideBarItem>
+                        <SideBarItem
+                            :href="route('password.request')"
+                            :active="route().current('password.request')"
+                        >
+                            Time Thread
+                        </SideBarItem>
                     </div>
                 </div>
-            </nav>
-
-            <!-- Page Heading -->
-            <header
-                class="bg-white shadow"
-                v-if="$slots.header"
-            >
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <slot name="header" />
+                <div class="page-content mt-10">
+                    <main>
+                        <header
+                            class=""
+                            v-if="$slots.header"
+                        >
+                            <div class="mx-auto montserrat-bold">
+                                <slot name="header" />
+                            </div>
+                        </header>
+                        <slot />
+                    </main>
                 </div>
-            </header>
-
-            <!-- Page Content -->
-            <main>
-                <slot />
-            </main>
+            </div>
         </div>
     </div>
 </template>
+<style scoped>
+.sidebar {
+    width: 15%;
+}
+.page-content {
+    width: 85%;
+}
+</style>
