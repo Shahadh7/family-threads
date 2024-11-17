@@ -35,7 +35,8 @@ Route::middleware('auth')->group(function () {
     // Route::delete('/memory-item/{id}', [MemoryItemController::class, 'destroy'])->name('memory-items.destroy');
 
     Route::get('/family-tree', [FamilyTreeController::class, 'index'])->name('family-tree.index');
-
+    Route::post('/family-tree', [FamilyTreeController::class, 'store'])->name('family-tree.store');
+    Route::put('/family-tree', [FamilyTreeController::class, 'update'])->name('family-tree.update');
 });
 
 Route::get('/', [ConnectionController::class, 'show']);

@@ -1,17 +1,27 @@
 <script setup>
+import FamilyTree from "@/Components/FamilyTree.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import { ref } from "vue";
+
+
+defineProps({
+    treeData: {
+        type: Object,
+        required: true
+    }
+})
 
 </script>
 
 <template>
     <Head title="Memory Items" />
-
     <AuthenticatedLayout :name="$page.props.auth.user.name">
         <template #header>
             <h2 class="text-3xl leading-tight text-gray-800">Family Tree</h2>
         </template>
+
+        <FamilyTree  class="my-12" :treeData="treeData"/>
     </AuthenticatedLayout>
 </template>
 <style scoped>
