@@ -1,6 +1,3 @@
-
-
-<!-- src/components/FamilyTree.vue -->
 <template>
     
     <v-container fluid class="pa-0 max-h-52">

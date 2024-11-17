@@ -33,7 +33,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // Validate incoming request
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:users',
@@ -42,7 +41,6 @@ class RegisteredUserController extends Controller
         ]);
 
         if ($request->filled('family_code')) {
-            // Register as a family member
             $family = Family::where('family_code', $request->family_code)->first();
 
             $user = User::create([
@@ -53,7 +51,6 @@ class RegisteredUserController extends Controller
                 'family_id' => $family->id, // Link user to family
             ]);
 
-            // Create membership record
             FamilyMembership::create([
                 'family_id' => $family->id,
                 'user_id' => $user->id,
@@ -61,7 +58,6 @@ class RegisteredUserController extends Controller
                 'join_date' => now(),
             ]);
         } else {
-            // Register as a new family admin and create a new family
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -69,17 +65,14 @@ class RegisteredUserController extends Controller
                 'role' => 'family_admin',
             ]);
 
-            // Create a new family
             $family = Family::create([
                 'family_name' => "{$request->name}'s Family",
                 'admin_user_id' => $user->id,
                 'family_code' => strtoupper(Str::random(6)), // Generate unique Family Code
             ]);
 
-            // Link user to the newly created family
             $user->update(['family_id' => $family->id]);
 
-            // Create membership record
             FamilyMembership::create([
                 'family_id' => $family->id,
                 'user_id' => $user->id,
@@ -88,7 +81,6 @@ class RegisteredUserController extends Controller
             ]);
         }
 
-        // Trigger the registered event and log in the user
         event(new Registered($user));
         Auth::login($user);
 
