@@ -8,6 +8,7 @@ use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\MemoryItemController;
 use App\Http\Controllers\FamilyTreeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TimeThreadController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -41,6 +42,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/get-users', [UserController::class, 'getAllUsers'])->name('get-users');
     Route::get('/current-user', [UserController::class, 'getCurrentUser'])->name('current-user');
+
+    Route::get('/time-thread', [TimeThreadController::class, 'index'])->name('time-thread.index');
 });
 
 Route::get('/', [ConnectionController::class, 'show']);

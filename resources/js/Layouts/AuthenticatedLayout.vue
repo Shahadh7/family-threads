@@ -152,8 +152,8 @@ const currentActive = ref("Home");
                             Memory Items
                         </SideBarItem>
                         <SideBarItem
-                            :href="route('password.request')"
-                            :active="route().current('password.request')"
+                            :href="route('time-thread.index')"
+                            :active="route().current('time-thread.index')"
                         >
                             Time Thread
                         </SideBarItem>
