@@ -199,7 +199,6 @@ onMounted(async() => {
         
         const itemToEdit = JSON.parse(localStorage.getItem('threadList')).find(item => item.id == currentItemId);
 
-        alert(itemToEdit);
 
         if (itemToEdit) {
             form.id = itemToEdit.id;
