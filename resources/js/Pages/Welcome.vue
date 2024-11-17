@@ -110,7 +110,9 @@ function handleImageError() {
             </div>
             <div class="flex mx-24 hero-content">
                 <div class="container-left relative">
-                    <div class="triangle absolute left-80 top-0"></div>
+                    <div class="triangle absolute left-80 -top-10 -z-10">
+                        <img src="/images/triangles.png" alt="triangle" width="520"/>
+                    </div>
                     <div class="text-2xl montserrat-bold mt-20">
                         Reconnect | Rediscover | Preserve Your Family Legacy
                     </div>
