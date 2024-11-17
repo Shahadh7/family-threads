@@ -140,8 +140,8 @@ const currentActive = ref("Home");
                             Dashboard
                         </SideBarItem>
                         <SideBarItem
-                            :href="route('password.request')"
-                            :active="route().current('password.request')"
+                            :href="route('family-tree.index')"
+                            :active="route().current('family-tree.index')"
                         >
                             Family Tree
                         </SideBarItem>

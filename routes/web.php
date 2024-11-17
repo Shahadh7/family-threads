@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\MemoryItemController;
+use App\Http\Controllers\FamilyTreeController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -32,6 +34,13 @@ Route::middleware('auth')->group(function () {
     // Route::get('/memory-item/{id}/edit', [MemoryItemController::class, 'edit'])->name('memory-items.edit');
     // Route::put('/memory-item/{id}', [MemoryItemController::class, 'update'])->name('memory-items.update');
     // Route::delete('/memory-item/{id}', [MemoryItemController::class, 'destroy'])->name('memory-items.destroy');
+
+    Route::get('/family-tree', [FamilyTreeController::class, 'index'])->name('family-tree.index');
+    Route::post('/family-tree', [FamilyTreeController::class, 'store'])->name('family-tree.store');
+    Route::put('/family-tree', [FamilyTreeController::class, 'update'])->name('family-tree.update');
+
+    Route::get('/get-users', [UserController::class, 'getAllUsers'])->name('get-users');
+    Route::get('/current-user', [UserController::class, 'getCurrentUser'])->name('current-user');
 });
 
 Route::get('/', [ConnectionController::class, 'show']);

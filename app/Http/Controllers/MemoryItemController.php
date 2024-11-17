@@ -22,10 +22,10 @@ class MemoryItemController extends Controller
         //
     }
 
-    public function show(MemoryItem $id) 
+    public function show($id) 
     {
         return Inertia::render('MemoryItem/Edit', [
-            'memoryItem' => 1 ]
+            'memoryItem' => $id ]
         );    
     }
 

@@ -1,9 +1,9 @@
 <script setup>
+import { onMounted, ref, computed } from "vue";
 import ActionButton from "@/Components/ActionButton.vue";
 import MemoryItemCard from "@/Components/MemoryItemCard.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
 
 const currentActive = ref("Memory Threads");
 
@@ -11,309 +11,77 @@ const setActive = (tag) => {
     currentActive.value = tag;
 };
 
-const AllItems = ref([
-    {
-        id: 1,
-        title: "Memory Thread 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Memory Thread",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 2,
-        title: "Time Capsule 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 3,
-        title: "Keep Sake Item 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Keep Sake Item",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 4,
-        title: "Memory Thread 2",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Memory Thread",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 5,
-        title: "Time Capsule 2",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-
-    },
-    {
-        id: 6,
-        title: "Time Capsule 3",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-
-    },
-    {
-        id: 7,
-        title: "Memory Thread 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Memory Thread",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 8,
-        title: "Time Capsule 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 9,
-        title: "Keep Sake Item 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Keep Sake Item",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 10,
-        title: "Memory Thread 2",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Memory Thread",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 11,
-        title: "Time Capsule 2",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-
-    },
-    {
-        id: 12,
-        title: "Time Capsule 3",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-
-    },
-    {
-        id: 13,
-        title: "Memory Thread 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Memory Thread",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 14,
-        title: "Time Capsule 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 15,
-        title: "Keep Sake Item 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Keep Sake Item",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 16,
-        title: "Memory Thread 2",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Memory Thread",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 17,
-        title: "Time Capsule 2",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-
-    },
-    {
-        id: 18,
-        title: "Time Capsule 3",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-
-    },
-    {
-        id: 19,
-        title: "Memory Thread 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Memory Thread",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 20,
-        title: "Time Capsule 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 21,
-        title: "Keep Sake Item 1",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Keep Sake Item",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 22,
-        title: "Memory Thread 2",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Memory Thread",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-    },  
-    {
-        id: 23,
-        title: "Time Capsule 2",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/shahadh.png",
-        media_type: 'image',
-        image: 'images/img-1.jpg'
-
-    },
-    {
-        id: 24,
-        title: "Time Capsule 3",
-        description: 'lorem ipsum dolor sit amet',
-        thread_type: "Time Capsule",
-        created_by: "Shahadh",
-        created_at: "2024-10-09",
-        profile_picture: "/images/img-4.webp",
-        media_type: 'image',
-        image: 'images/img-4.webp'
-
-    },
-])
+const AllItems = ref([]);
 
 const filteredItems = computed(() => {
     switch (currentActive.value) {
         case "All Items":
             return AllItems.value;
         case "Memory Threads":
-            return AllItems.value.filter((item) => item.thread_type === "Memory Thread");
+            return AllItems.value.filter((item) => item.thread_type.value === "Memory Thread");
         case "Time Capsules":
-            return AllItems.value.filter((item) => item.thread_type === "Time Capsule");
+            return AllItems.value.filter((item) => item.thread_type.value === "Time Capsule");
         case "Keep Sake Items":
-            return AllItems.value.filter((item) => item.thread_type === "Keep Sake Item");
+            return AllItems.value.filter((item) => item.thread_type.value === "Keep Sake");
         default:
             return AllItems.value;
     }
-})
+});
 
 const navigateToAddMemoryItem = () => {
     router.get(route('memory-items.create'));
-}
+};
 
 const removeItem = (id) => {
     AllItems.value = AllItems.value.filter((item) => item.id !== id);
-}
+    // Update localStorage after removing the item
+    let findItem = JSON.parse(localStorage.getItem("threadList"));
+    findItem = findItem.filter((item) => item.id !== id);
+    localStorage.setItem("threadList", JSON.stringify(findItem));
+};
 
+// Convert Base64 to Blob URL
+const base64ToImage = (base64String) => {
+    const binary = atob(base64String.split(",")[1]);
+    const array = [];
+    for (let i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+    }
+    const blob = new Blob([new Uint8Array(array)], { type: "image/jpeg" }); // Update type based on the file type
+    return URL.createObjectURL(blob);
+};
+
+// Rearrange Array
+const rearrangeArray = (array) => {
+    // Example rearrangement: Sort by `created_at` date descending
+    return array.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+};
+
+// Fetch thread list from localStorage on component mount
+onMounted(() => {
+    const savedThreads = JSON.parse(localStorage.getItem("threadList")) || [];
+
+    const currentUser = localStorage.getItem("currentUser");
+
+    const filteredThreads = savedThreads.filter((item) => item.created_by === currentUser);
+
+    // Convert Base64 image to Blob URL and rearrange the array
+    const processedThreads = filteredThreads.map((item) => {
+        if (item.file) {
+            item.file = base64ToImage(item.file); // Convert base64 to Blob URL
+        }
+        return item;
+    });
+
+    AllItems.value = rearrangeArray(processedThreads); // Rearrange the array
+
+    localStorage.removeItem("currentEditingItem");
+});
 </script>
+
 
 <template>
     <Head title="Memory Items" />
-
     <AuthenticatedLayout :name="$page.props.auth.user.name">
         <template #header>
             <h2 class="text-3xl leading-tight text-gray-800">Memory Items</h2>
