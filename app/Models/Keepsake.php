@@ -10,8 +10,8 @@ class Keepsake extends Model
     use HasFactory;
 
     protected $fillable = [
-        'item_id',
-        'photo',
+        'given_to_user_id',
+        'memory_item_id'
     ];
 
     public function memoryItem()

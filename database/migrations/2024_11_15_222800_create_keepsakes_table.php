@@ -6,22 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('keepsakes', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->foreignId('item_id')->constrained('memory_items')->onDelete('cascade'); // Memory item link
-            $table->string('photo')->nullable();
+            $table->id();
+            $table->foreignId('memory_item_id')->constrained('memory_items')->onDelete('cascade'); // Link to memory items
+            $table->foreignId('given_to_user_id')->nullable()->constrained('users')->onDelete('set null'); // Currently assigned user
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('keepsakes');

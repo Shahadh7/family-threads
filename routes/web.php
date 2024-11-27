@@ -30,11 +30,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/memory-item', [MemoryItemController::class, 'index'])->name('memory-items.index');
     Route::get('/memory-item/create', [MemoryItemController::class, 'create'])->name('memory-items.create');
-    // Route::post('/memory-item', [MemoryItemController::class, 'store'])->name('memory-items.store');
+    Route::post('/memory-item', [MemoryItemController::class, 'store'])->name('memory-items.store');
     Route::get('/memory-item/{id}', [MemoryItemController::class, 'show'])->name('memory-items.show');
-    // Route::get('/memory-item/{id}/edit', [MemoryItemController::class, 'edit'])->name('memory-items.edit');
-    // Route::put('/memory-item/{id}', [MemoryItemController::class, 'update'])->name('memory-items.update');
-    // Route::delete('/memory-item/{id}', [MemoryItemController::class, 'destroy'])->name('memory-items.destroy');
+    Route::get('/memory-item/{id}/edit', [MemoryItemController::class, 'edit'])->name('memory-items.edit');
+    Route::put('/memory-item/{id}', [MemoryItemController::class, 'update'])->name('memory-items.update');
+    Route::delete('/memory-item/{id}', [MemoryItemController::class, 'destroy'])->name('memory-items.destroy');
 
     Route::get('/family-tree', [FamilyTreeController::class, 'index'])->name('family-tree.index');
     Route::post('/family-tree', [FamilyTreeController::class, 'store'])->name('family-tree.store');

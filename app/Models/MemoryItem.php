@@ -10,9 +10,11 @@ class MemoryItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'thread_id',
+        'type',
         'added_by_user_id',
         'description',
+        'family_id',
+        'file_id'
     ];
 
     public function thread()

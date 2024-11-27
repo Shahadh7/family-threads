@@ -13,6 +13,8 @@ const setActive = (tag) => {
 
 const AllItems = ref([]);
 
+const snackbar = ref(true); 
+
 const filteredItems = computed(() => {
     switch (currentActive.value) {
         case "All Items":
@@ -83,6 +85,14 @@ onMounted(() => {
 <template>
     <Head title="Memory Items" />
     <AuthenticatedLayout :name="$page.props.auth.user.name">
+        <v-snackbar v-model="snackbar" :timeout="3000" color="green" v-if="$page.props.flash != null">
+            {{ $page.props.flash}}
+            <template v-slot:action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+                Close
+            </v-btn>
+            </template>
+        </v-snackbar>
         <template #header>
             <h2 class="text-3xl leading-tight text-gray-800">Memory Items</h2>
         </template>

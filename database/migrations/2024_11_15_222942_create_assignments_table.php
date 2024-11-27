@@ -6,23 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('assignments', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->foreignId('assignable_id'); // ID of the time capsule or keepsake
-            $table->string('assignable_type'); // Model type: 'time_capsule' or 'keepsake'
+            $table->id();
+            $table->morphs('assignable'); // Polymorphic relation for keepsakes and time capsules
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // User who is assigned
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('assignments');
