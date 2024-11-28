@@ -10,23 +10,18 @@ defineProps({
     }
 })
 
-const currentEditingItem = ref(null);
-
-const saveCurentEditingItem = (id) => {
-    localStorage.setItem('currentEditingItem', id);
-}
 
 
 </script>
 <template>
     <div class="memory-item-card">
         <div class="memory-item-card-image relative">
-            <img :src="memoryItem.file" alt="memory-item" />
+            <img :src="memoryItem.file.url" alt="memory-item" />
             <div class="flex flex-col absolute gap-2 top-3 right-3">
                 <ActionButton @click="$emit('removeItem', memoryItem.id)">
                     <span class="mdi mdi-close text-lg"></span>
                 </ActionButton>
-                <Link @click="saveCurentEditingItem(memoryItem.id)" :href="route('memory-items.show', memoryItem.id)" >
+                <Link :href="route('memory-items.edit', memoryItem.id)" >
                     <ActionButton>
                         <span class="mdi mdi-pencil text-lg"></span>
                     </ActionButton>

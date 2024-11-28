@@ -39,7 +39,7 @@ defineProps({
         </div>
 
         <div class="p-6 bg-white border-b border-gray-200 max-h-custom">
-            <MemoryItemForm />
+            <MemoryItemForm :memoryItem="memoryItem"  />
         </div>
 
     </AuthenticatedLayout>

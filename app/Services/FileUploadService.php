@@ -56,7 +56,7 @@ class FileUploadService
         try {
             return Storage::disk('do')->delete($path);
         } catch (\Exception $e) {
-            \Log::error('Error in deleteFileFromSpaces: ' . $e->getMessage());
+            \Log::error('Error in delete File From Spaces: ' . $e->getMessage());
             return response()->json(['error' => 'Unable to delete file.'], 500);
         }
     }

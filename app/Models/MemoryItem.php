@@ -13,28 +13,31 @@ class MemoryItem extends Model
         'type',
         'added_by_user_id',
         'description',
+        'title',
         'family_id',
-        'file_id'
+        'file_id',
+        'public',
+        'can_be_viewed_by'
     ];
 
-    public function thread()
+    public function file()
     {
-        return $this->belongsTo(MemoryThread::class, 'thread_id');
+        return $this->belongsTo(File::class);
     }
 
-    public function creator()
+    public function memoryThread()
     {
-        return $this->belongsTo(User::class, 'added_by_user_id');
+        return $this->hasOne(MemoryThread::class);
+    }
+
+    public function keepSake()
+    {
+        return $this->hasOne(Keepsake::class);
     }
 
     public function timeCapsule()
     {
-        return $this->hasOne(TimeCapsule::class, 'item_id');
-    }
-
-    public function keepsake()
-    {
-        return $this->hasOne(Keepsake::class, 'item_id');
+        return $this->hasOne(TimeCapsule::class);
     }
 }
 

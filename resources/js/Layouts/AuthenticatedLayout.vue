@@ -25,10 +25,6 @@ const props = defineProps({
 
 const imageAvailable = ref(true);
 
-const firstLetter = computed(() => {
-    return props.name.charAt(0).toUpperCase(); // Get the first letter of the name
-});
-
 // Handle image error by showing the first letter instead
 const handleImageError = () => {
     imageAvailable.value = false;
@@ -63,7 +59,7 @@ const currentActive = ref("Home");
                                                 <span
                                                     class="h-14 w-14 rounded-full flex items-center justify-center bg-gray-500 text-white font-bold border-4 border-solid border-black"
                                                 >
-                                                    {{ firstLetter }}
+                                                    {{ $page.props.auth.user.name.charAt(0).toUpperCase() }}
                                                 </span>
                                             </template>
                                         </span>

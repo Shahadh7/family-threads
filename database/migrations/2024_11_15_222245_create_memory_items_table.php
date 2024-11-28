@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id(); // Primary key
             $table->foreignId('added_by_user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('family_id')->constrained('families')->onDelete('cascade');
+            $table->string('title');
             $table->text('description')->nullable();
             $table->timestamp('date_added')->useCurrent();
             $table->enum('type', ['MemoryThread', 'TimeCapsule', 'Keepsake']);
             $table->foreignId('file_id')->nullable()->constrained('files')->onDelete('cascade');
+            $table->boolean('public')->default(false);
             $table->timestamps();
         });
     }

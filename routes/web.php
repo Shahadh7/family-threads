@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/memory-item/{id}/edit', [MemoryItemController::class, 'edit'])->name('memory-items.edit');
     Route::put('/memory-item/{id}', [MemoryItemController::class, 'update'])->name('memory-items.update');
     Route::delete('/memory-item/{id}', [MemoryItemController::class, 'destroy'])->name('memory-items.destroy');
+    Route::get('/memory-item-by-type/{type}', [MemoryItemController::class, 'getMemoryItemByType'])->name('memory-items.type');
 
     Route::get('/family-tree', [FamilyTreeController::class, 'index'])->name('family-tree.index');
     Route::post('/family-tree', [FamilyTreeController::class, 'store'])->name('family-tree.store');
