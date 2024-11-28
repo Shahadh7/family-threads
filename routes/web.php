@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/get-users', [UserController::class, 'getAllUsers'])->name('get-users');
     Route::get('/current-user', [UserController::class, 'getCurrentUser'])->name('current-user');
+    Route::post('/invite-user', [UserController::class, 'inviteUser'])->name('invite-user');
 
     Route::get('/time-thread', [TimeThreadController::class, 'index'])->name('time-thread.index');
 
