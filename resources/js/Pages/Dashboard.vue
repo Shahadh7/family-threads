@@ -88,7 +88,6 @@ const fetchMemoryItemsByTag = async (tag) => {
 
 <template>
     <Head title="Dashboard" />
-    {{ AllItems }}
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-3xl leading-tight text-gray-800">Home</h2>
@@ -156,13 +155,16 @@ const fetchMemoryItemsByTag = async (tag) => {
                 >
             </div>
         </div>
+        <template v-if="AllItems.length === 0">
+            <p class="my-5 text-md montserrat-light">No records available at the moment.</p>
+        </template>
 
         <div class="py-5">
             <div class="max-w-5xl">
                 <div
                     class="overflow-hidden shadow-sm sm:rounded-lg max-h-custom overflow-y-scroll"
                 >
-                    <div class="pb-6 border-b border-gray-200">
+                    <div :class="['pb-6', AllItems.length === 0 ? '' : 'border-b border-gray-200']">
                         <div
                             class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-5"
                         >

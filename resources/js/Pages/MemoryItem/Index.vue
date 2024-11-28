@@ -95,21 +95,21 @@ const confirmRemove = (id) => {
             <div class="flex gap-1 my-5">
                 <div
                     class="tag"
-                    :class="{ 'tag-active': currentActive === 'MemoryThread' }"
+                    :class="{ 'tag-active': currentActive === 'MemoryThread' }, 'cursor-pointer'"
                     @click="setActive('MemoryThread')"
                 >
                     <span :class="['text-xs', currentActive === 'MemoryThread' ? 'montserrat-bold' : 'montserrat-light']">Memory Threads</span>
                 </div>
                 <div
                     class="tag"
-                    :class="{ 'tag-active': currentActive === 'Keepsake' }"
+                    :class="{ 'tag-active': currentActive === 'Keepsake' } , 'cursor-pointer'"
                     @click="setActive('Keepsake')"
                 >
                     <span :class="['text-xs', currentActive === 'Keepsake' ? 'montserrat-bold' : 'montserrat-light']">Keep Sake Items</span>
                 </div>
                 <div
                     class="tag"
-                    :class="{ 'tag-active': currentActive === 'TimeCapsule' }"
+                    :class="{ 'tag-active': currentActive === 'TimeCapsule' } , 'cursor-pointer'"
                     @click="setActive('TimeCapsule')"
                 >
                     <span :class="['text-xs', currentActive === 'TimeCapsule' ? 'montserrat-bold' : 'montserrat-light']">Time Capsules</span>

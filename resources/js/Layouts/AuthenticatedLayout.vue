@@ -30,7 +30,7 @@ const currentActive = ref("Home");
                 <div class="w-full px-4 sm:px-6 lg:px-8 mt-3">
                     <div class="flex h-16 justify-between">
                         <ApplicationLogo />
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div class="hidden sm:ms-6 sm:flex sm:items-center cursor-pointer">
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
