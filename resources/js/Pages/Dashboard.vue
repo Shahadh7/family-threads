@@ -40,8 +40,6 @@ const updateTimeCapsules = () => {
             const openDate = moment(item.time_capsule.open_date).utc();
             const diff = openDate.diff(now);
 
-            console.log(`Now: ${now}, Open Date: ${openDate}, Diff: ${diff}`);
-
             if (diff <= 0) {
                 timeExpiredMap.value[item.id] = true; // Mark as expired
                 timeRemainingMap.value[item.id] = "Expired";
