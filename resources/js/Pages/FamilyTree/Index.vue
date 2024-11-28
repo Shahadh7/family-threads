@@ -37,7 +37,7 @@ const sendInvitation = () => {
     }).catch((error) => {
         snackbarText.value = "Error sending invitation.";
     })
-    
+
     closeModal();
 };
 
@@ -61,6 +61,7 @@ const sendInvitation = () => {
             <button
                 class="bg-slate-800 text-white px-4 py-2 rounded-lg montserrat-light"
                 @click="showInvitationModal"
+                v-if="$page.props.auth.user.role === 'family_admin'"
             >
                 Send Invitation
             </button>
