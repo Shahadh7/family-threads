@@ -1,119 +1,95 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 import moment from "moment";
 import axios from "axios";
 
-const currentActive = ref("All Items");
-
-const setActive = (tag) => {
-    currentActive.value = tag;
-};
-
-const AllItems = ref([]);
-const timeRemainingMap = ref({}); // Reactive map for time remaining
-const timeExpiredMap = ref({}); // Tracks whether the time has expired for each item
-
-const filteredItems = computed(() => {
-    switch (currentActive.value) {
-        case "All Items":
-            return AllItems.value;
-        case "Memory Threads":
-            return AllItems.value.filter(
-                (item) => item.thread_type.value === "Memory Thread"
-            );
-        case "Time Capsules":
-            return AllItems.value.filter(
-                (item) => item.thread_type.value === "Time Capsule"
-            );
-        case "Keep Sake Items":
-            return AllItems.value.filter(
-                (item) => item.thread_type.value === "Keep Sake"
-            );
-        default:
-            return AllItems.value;
-    }
+const props = defineProps({
+    memoryItems: {
+        type: Array,
+        required: true,
+    },
 });
 
-const getCurrentUser = async () => {
-    axios.get("/current-user").then((response) => {
-        localStorage.setItem("currentUser", response.data.name);
-    });
+const user = computed(() => usePage().props.auth.user);
+
+const currentActive = ref("AllItems");
+
+const setActive = async (tag) => {
+    currentActive.value = tag;
+    fetchMemoryItemsByTag(tag);
 };
+
+const AllItems = ref(props.memoryItems);
+const timeRemainingMap = ref({}); // Reactive map for time remaining
+const timeExpiredMap = ref({}); // Tracks whether the time has expired for each item
+const intervalId = ref(null);
 
 const toggleLike = (item) => {
     item.liked = !item.liked; // Toggle the liked state
 };
 
-// Update remaining time for all "Time Capsule" items
+// Update remaining time for all "Time Capsule" itemsconst updateTimeCapsules = () => {
 const updateTimeCapsules = () => {
+    let allExpired = true; // Flag to check if all time capsules have expired
+
     AllItems.value.forEach((item) => {
-        if (item.thread_type.value === "Time Capsule") {
-            const now = moment(); // Current time
-            const diff = moment(item.open_date).diff(now); // Calculate time difference
+        if (item.type === "TimeCapsule") {
+            const now = moment().utc();
+            const openDate = moment(item.time_capsule.open_date).utc();
+            const diff = openDate.diff(now);
+
+            console.log(`Now: ${now}, Open Date: ${openDate}, Diff: ${diff}`);
+
             if (diff <= 0) {
                 timeExpiredMap.value[item.id] = true; // Mark as expired
                 timeRemainingMap.value[item.id] = "Expired";
             } else {
+                allExpired = false; // If any item is not expired, keep checking
                 timeExpiredMap.value[item.id] = false;
                 const duration = moment.duration(diff);
                 const days = Math.floor(duration.asDays());
                 const hours = duration.hours();
                 const minutes = duration.minutes();
                 const seconds = duration.seconds();
-                timeRemainingMap.value[item.id] = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                timeRemainingMap.value[
+                    item.id
+                ] = `${days}d ${hours}h ${minutes}m ${seconds}s`;
             }
         }
     });
+
+    // Stop the interval when all time capsules are expired
+    if (allExpired) {
+        clearInterval(intervalId.value);
+        intervalId.value = null; // Clear the interval ID to indicate it's stopped
+    }
 };
 
 // Fetch thread list from localStorage on component mount
 onMounted(async () => {
-    await getCurrentUser();
-
-    const savedThreads = JSON.parse(localStorage.getItem("threadList")) || [];
-    const currentUser = localStorage.getItem("currentUser");
-
-    const filteredThreads = savedThreads.filter(
-        (item) =>
-            item.created_by === currentUser ||
-            item.public === true ||
-            item.canviewbyUsers.some((user) => user.value === currentUser)
-    );
-
-    const processedThreads = filteredThreads.map((item) => {
-        if (item.file) {
-            item.file = base64ToImage(item.file); // Convert Base64 to Blob URL
-        }
-        return item;
-    });
-
-    AllItems.value = rearrangeArray(processedThreads); // Rearrange the array
-
     updateTimeCapsules(); // Initial update
-    setInterval(updateTimeCapsules, 1000); // Update every second
+    intervalId.value = setInterval(updateTimeCapsules, 1000);
 });
 
-const base64ToImage = (base64String) => {
-    const binary = atob(base64String.split(",")[1]);
-    const array = [];
-    for (let i = 0; i < binary.length; i++) {
-        array.push(binary.charCodeAt(i));
-    }
-    const blob = new Blob([new Uint8Array(array)], { type: "image/jpeg" });
-    return URL.createObjectURL(blob);
+const rearrangeArray = (array) => {
+    return array.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
 };
 
-const rearrangeArray = (array) => {
-    return array.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+const fetchMemoryItemsByTag = async (tag) => {
+    axios
+        .get(`/dashboard/memory-items/${tag}`)
+        .then((response) => (AllItems.value = response.data));
 };
 </script>
 
 <template>
     <Head title="Dashboard" />
-
-    <AuthenticatedLayout :name="$page.props.auth.user.name">
+    {{ AllItems }}
+    <AuthenticatedLayout>
         <template #header>
             <h2 class="text-3xl leading-tight text-gray-800">Home</h2>
         </template>
@@ -121,13 +97,13 @@ const rearrangeArray = (array) => {
         <div class="flex gap-1 my-5 border-b pb-3 border-gray-200 max-w-5xl">
             <div
                 class="tag"
-                :class="{ 'tag-active': currentActive === 'All Items' }"
-                @click="setActive('All Items')"
+                :class="{ 'tag-active': currentActive === 'AllItems' }"
+                @click="setActive('AllItems')"
             >
                 <span
                     :class="[
                         'text-xs',
-                        currentActive === 'All Items'
+                        currentActive === 'AllItems'
                             ? 'montserrat-bold'
                             : 'montserrat-light',
                     ]"
@@ -136,28 +112,28 @@ const rearrangeArray = (array) => {
             </div>
             <div
                 class="tag"
-                :class="{ 'tag-active': currentActive === 'Memory Threads' }"
-                @click="setActive('Memory Threads')"
+                :class="{ 'tag-active': currentActive === 'MemoryThread' }"
+                @click="setActive('MemoryThread')"
             >
                 <span
                     :class="[
                         'text-xs',
-                        currentActive === 'Memory Threads'
+                        currentActive === 'MemoryThread'
                             ? 'montserrat-bold'
                             : 'montserrat-light',
                     ]"
-                    >Memory Thread</span
+                    >Memory Threads</span
                 >
             </div>
             <div
                 class="tag"
-                :class="{ 'tag-active': currentActive === 'Keep Sake Items' }"
-                @click="setActive('Keep Sake Items')"
+                :class="{ 'tag-active': currentActive === 'Keepsake' }"
+                @click="setActive('Keepsake')"
             >
                 <span
                     :class="[
                         'text-xs',
-                        currentActive === 'Keep Sake Items'
+                        currentActive === 'Keepsake'
                             ? 'montserrat-bold'
                             : 'montserrat-light',
                     ]"
@@ -166,13 +142,13 @@ const rearrangeArray = (array) => {
             </div>
             <div
                 class="tag"
-                :class="{ 'tag-active': currentActive === 'Time Capsules' }"
-                @click="setActive('Time Capsules')"
+                :class="{ 'tag-active': currentActive === 'TimeCapsule' }"
+                @click="setActive('TimeCapsule')"
             >
                 <span
                     :class="[
                         'text-xs',
-                        currentActive === 'Time Capsules'
+                        currentActive === 'TimeCapsule'
                             ? 'montserrat-bold'
                             : 'montserrat-light',
                     ]"
@@ -191,14 +167,16 @@ const rearrangeArray = (array) => {
                             class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-5"
                         >
                             <div
-                                v-for="item in filteredItems"
+                                v-for="item in AllItems"
                                 :key="item.id"
                                 class="flex flex-col gap-2 bg-white p-5 rounded-3xl"
                             >
                                 <div class="flex justify-between items-center">
-                                    <div class="flex gap-2">
+                                    <div
+                                        class="flex gap-2 justify-center items-center"
+                                    >
                                         <span class="inline-flex rounded-md">
-                                            <template v-if="image">
+                                            <template v-if="item.profile_image">
                                                 <img
                                                     :src="item.profile_image"
                                                     alt="Avatar"
@@ -211,7 +189,7 @@ const rearrangeArray = (array) => {
                                                     class="h-14 w-14 rounded-full flex items-center justify-center bg-gray-500 text-white font-bold border-4 border-solid border-black"
                                                 >
                                                     {{
-                                                        item.created_by
+                                                        item.user.name
                                                             .charAt(0)
                                                             .toUpperCase()
                                                     }}
@@ -222,10 +200,14 @@ const rearrangeArray = (array) => {
                                             <p
                                                 class="text-sm montserrat-bold mb-2"
                                             >
-                                                {{ item.created_by }}
+                                                {{ item.user.name }}
                                             </p>
                                             <p class="text-xs montserrat-light">
-                                                {{ item.created_at }}
+                                                {{
+                                                    moment(
+                                                        item.created_at
+                                                    ).fromNow()
+                                                }}
                                             </p>
                                         </div>
                                     </div>
@@ -233,23 +215,22 @@ const rearrangeArray = (array) => {
                                         <span
                                             :class="[
                                                 'mdi text-3xl',
-                                                item.liked ? 'mdi-heart text-yellow-500' : 'mdi-heart-outline text-gray-400',
+                                                item.liked
+                                                    ? 'mdi-heart text-yellow-500'
+                                                    : 'mdi-heart-outline text-gray-400',
                                             ]"
                                             @click="toggleLike(item)"
                                         ></span>
-                                        <span class="mdi mdi-chat-outline text-3xl text-gray-400"></span>
+                                        <span
+                                            class="mdi mdi-chat-outline text-3xl text-gray-400"
+                                        ></span>
                                     </div>
                                 </div>
-                                <template
-                                    v-if="
-                                        item.thread_type.value !==
-                                        'Time Capsule'
-                                    "
-                                >
+                                <template v-if="item.type !== 'TimeCapsule'">
                                     <div class="flex">
                                         <img
                                             class="w-full object-contain"
-                                            :src="item.file"
+                                            :src="item.file.url"
                                             alt="image"
                                         />
                                     </div>
@@ -262,17 +243,19 @@ const rearrangeArray = (array) => {
                                         </p>
                                     </div>
                                 </template>
-                                <template v-if="item.thread_type.value === 'Time Capsule'">
-                                    <div v-if="timeExpiredMap[item.id]">
+                                <template v-if="item.type === 'TimeCapsule'">
+                                    <div v-if="timeExpiredMap[item.id] == true">
                                         <div class="flex">
                                             <img
                                                 class="w-full object-contain"
-                                                :src="item.file"
+                                                :src="item.file.url"
                                                 alt="image"
                                             />
                                         </div>
                                         <div class="flex flex-col mt-4">
-                                            <p class="text-xs montserrat-bold mb-3">
+                                            <p
+                                                class="text-xs montserrat-bold mb-3"
+                                            >
                                                 {{ item.title }}
                                             </p>
                                             <p class="text-sm montserrat-light">
@@ -281,19 +264,21 @@ const rearrangeArray = (array) => {
                                         </div>
                                     </div>
                                     <div v-else>
-                                        <div class="w-full h-96 flex justify-center items-center bg-slate-200 rounded-md">
+                                        <div
+                                            class="w-full h-96 flex justify-center items-center bg-slate-200 rounded-md"
+                                        >
                                             <p>
                                                 Opens in:
-                                                {{ timeRemainingMap[item.id] || 'Calculating...' }}
+                                                {{
+                                                    timeRemainingMap[item.id] ||
+                                                    "Calculating..."
+                                                }}
                                             </p>
                                         </div>
                                     </div>
                                 </template>
-                                <template
-                                    v-if="
-                                        item.thread_type.value === 'Keep Sake'
-                                    "
-                                >
+
+                                <template v-if="item.type === 'Keepsake'">
                                     <div class="flex gap-2 items-center mt-3">
                                         <p class="montserrat-light text-sm">
                                             Passed on :
@@ -302,7 +287,7 @@ const rearrangeArray = (array) => {
                                             class="w-24 flex justify-center items-center"
                                             ><span
                                                 class="text-sm montserrat-light"
-                                                >{{ item.created_by }}</span
+                                                >{{ item.user.name }}</span
                                             ></v-chip
                                         >
                                         <span
@@ -313,7 +298,8 @@ const rearrangeArray = (array) => {
                                             ><span
                                                 class="text-sm montserrat-light"
                                                 >{{
-                                                    item.givenFromTo.value
+                                                    item.keep_sake
+                                                        .passed_on_user.name
                                                 }}</span
                                             ></v-chip
                                         >

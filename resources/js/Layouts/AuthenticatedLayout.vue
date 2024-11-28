@@ -11,17 +11,6 @@ import SideBarItem from "@/Components/SideBarItem.vue";
 
 const showingNavigationDropdown = ref(false);
 
-const props = defineProps({
-    image: {
-        type: String,
-        default: "", // Default to empty string if no image is provided
-    },
-    name: {
-        type: String,
-        required: true, // Ensure a name is always provided
-        default: "User",
-    },
-});
 
 const imageAvailable = ref(true);
 
@@ -47,9 +36,9 @@ const currentActive = ref("Home");
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
-                                            <template v-if="image">
+                                            <template v-if="$page.props.auth.user.profile_picture !== null">
                                                 <img
-                                                    :src="image"
+                                                    :src="$page.props.auth.user.profile_picture"
                                                     alt="Avatar"
                                                     class="h-14 w-14 rounded-full object-cover border-4 border-solid border-black"
                                                     @error="handleImageError"

@@ -24,7 +24,7 @@ const breadCrumbs = ref([
 <template>
     <Head title="Add Memory Item" />
 
-    <AuthenticatedLayout :name="$page.props.auth.user.name">
+    <AuthenticatedLayout>
         <template #header>
             <h2 class="text-3xl leading-tight text-gray-800">Memory Items</h2>
         </template>

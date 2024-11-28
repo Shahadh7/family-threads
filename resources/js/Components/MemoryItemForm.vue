@@ -199,8 +199,6 @@ const format = (date) => {
 </script>
 <template>
     <div class="p-4 w-full">
-        
-        {{ $page.props.errors }}
         <p class="text-md montserrat-bold"><span>{{ editing ? "Edit" : "Add" }}</span> Memory Item</p>
         <form @submit.prevent="submit">
             <v-combobox

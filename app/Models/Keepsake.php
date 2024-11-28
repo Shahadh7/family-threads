@@ -23,5 +23,10 @@ class Keepsake extends Model
     {
         return $this->hasMany(Assignment::class, 'assignable_id');
     }
+
+    public function passedOnUser()
+    {
+        return $this->belongsTo(User::class, 'given_to_user_id');
+    }
 }
 

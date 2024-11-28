@@ -39,5 +39,10 @@ class MemoryItem extends Model
     {
         return $this->hasOne(TimeCapsule::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'added_by_user_id');
+    }
 }
 

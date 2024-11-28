@@ -9,6 +9,7 @@ use App\Http\Controllers\MemoryItemController;
 use App\Http\Controllers\FamilyTreeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TimeThreadController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -18,9 +19,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/current-user', [UserController::class, 'getCurrentUser'])->name('current-user');
 
     Route::get('/time-thread', [TimeThreadController::class, 'index'])->name('time-thread.index');
+
+    Route::get('/dashboard/memory-items/{tag}', [DashboardController::class, 'memoryItemsByTag'])->name('dashboard.memory-items');
 });
 
 Route::get('/', [ConnectionController::class, 'show']);

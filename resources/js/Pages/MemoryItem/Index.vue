@@ -68,7 +68,7 @@ const confirmRemove = (id) => {
 
 <template>
     <Head title="Memory Items" />
-    <AuthenticatedLayout :name="$page.props.auth.user.name">
+    <AuthenticatedLayout>
         <v-snackbar v-model="snackbar" :timeout="3000" color="green" v-if="$page.props.flash != null">
             {{ $page.props.flash}}
             <template v-slot:action="{ attrs }">

@@ -16,7 +16,7 @@ defineProps({
 
 <template>
     <Head title="Memory Items" />
-    <AuthenticatedLayout :name="$page.props.auth.user.name">
+    <AuthenticatedLayout>
         <template #header>
             <h2 class="text-3xl leading-tight text-gray-800">Family Tree</h2>
         </template>
