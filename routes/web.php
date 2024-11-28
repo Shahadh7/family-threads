@@ -9,6 +9,7 @@ use App\Http\Controllers\MemoryItemController;
 use App\Http\Controllers\FamilyTreeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TimeThreadController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -18,9 +19,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,11 +29,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/memory-item', [MemoryItemController::class, 'index'])->name('memory-items.index');
     Route::get('/memory-item/create', [MemoryItemController::class, 'create'])->name('memory-items.create');
-    // Route::post('/memory-item', [MemoryItemController::class, 'store'])->name('memory-items.store');
+    Route::post('/memory-item', [MemoryItemController::class, 'store'])->name('memory-items.store');
     Route::get('/memory-item/{id}', [MemoryItemController::class, 'show'])->name('memory-items.show');
-    // Route::get('/memory-item/{id}/edit', [MemoryItemController::class, 'edit'])->name('memory-items.edit');
-    // Route::put('/memory-item/{id}', [MemoryItemController::class, 'update'])->name('memory-items.update');
-    // Route::delete('/memory-item/{id}', [MemoryItemController::class, 'destroy'])->name('memory-items.destroy');
+    Route::get('/memory-item/{id}/edit', [MemoryItemController::class, 'edit'])->name('memory-items.edit');
+    Route::put('/memory-item/{id}', [MemoryItemController::class, 'update'])->name('memory-items.update');
+    Route::delete('/memory-item/{id}', [MemoryItemController::class, 'destroy'])->name('memory-items.destroy');
+    Route::get('/memory-item-by-type/{type}', [MemoryItemController::class, 'getMemoryItemByType'])->name('memory-items.type');
 
     Route::get('/family-tree', [FamilyTreeController::class, 'index'])->name('family-tree.index');
     Route::post('/family-tree', [FamilyTreeController::class, 'store'])->name('family-tree.store');
@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/current-user', [UserController::class, 'getCurrentUser'])->name('current-user');
 
     Route::get('/time-thread', [TimeThreadController::class, 'index'])->name('time-thread.index');
+
+    Route::get('/dashboard/memory-items/{tag}', [DashboardController::class, 'memoryItemsByTag'])->name('dashboard.memory-items');
 });
 
 Route::get('/', [ConnectionController::class, 'show']);

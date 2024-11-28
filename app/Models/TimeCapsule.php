@@ -12,8 +12,8 @@ class TimeCapsule extends Model
     protected $fillable = [
         'item_id',
         'open_date',
-        'notification_sent',
         'status',
+        'memory_item_id'
     ];
 
     public function memoryItem()

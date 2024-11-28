@@ -10,8 +10,8 @@ class Keepsake extends Model
     use HasFactory;
 
     protected $fillable = [
-        'item_id',
-        'photo',
+        'given_to_user_id',
+        'memory_item_id'
     ];
 
     public function memoryItem()
@@ -22,6 +22,11 @@ class Keepsake extends Model
     public function assignments()
     {
         return $this->hasMany(Assignment::class, 'assignable_id');
+    }
+
+    public function passedOnUser()
+    {
+        return $this->belongsTo(User::class, 'given_to_user_id');
     }
 }
 

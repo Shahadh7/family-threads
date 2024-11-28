@@ -1,48 +1,60 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "./SecondaryButton.vue";
+import InputError from "@/Components/InputError.vue";
 import axios from "axios";
+import { useForm } from "@inertiajs/vue3";
 
 
 const props = defineProps({
-    item: {
+    memoryItem: {
         type: Object,
         required: false
-    }
-
+    },
 })
 
 
-const form = reactive({
+const form = useForm({
     id: "",
-    thread_type: "",
-    open_date: "",
-    title: "",
-    description: "",
-    file: "",
-    location: "",
-    memThreadDate: "",
+    title: null,
+    description: null,
+    file: null,
     public: true,
-    canviewbyUsers: [],
-    created_by: "",
-    created_at: "",
-    profile_picture: "",
-    givenFromTo: "",
+    type: null,
+    location: null,
+    date: null,
+    open_date: null,
+    given_to_user_id: null,
+    user: null,
+    can_be_viewed_by: [],
+    added_by_user_id: null,
 });
 
 const items = [
-    { title: "Memory Thread", value: "Memory Thread" },
-    { title: "Keep Sake", value: "Keep Sake" },
-    { title: "Time Capsule", value: "Time Capsule" },
+    { title: "Memory Thread", value: "MemoryThread" },
+    { title: "Keep Sake", value: "Keepsake" },
+    { title: "Time Capsule", value: "TimeCapsule" },
 ];
 
 const submit = () => {
-    // router.post("/memory-item", form);
 
+    if (form.user && form.user.value) {
+        form.given_to_user_id = form.user.value; // Set the value as the ID
+    } else {
+        form.given_to_user_id = null; // Set to null if no user is selected
+    }
+
+    if(!editing.value) {
+        router.post("/memory-item", form);
+
+    }else {
+        router.put("/memory-item/" + form.id, form);
+    }
+    
 };
 
 const navigateToMain = () => {
@@ -53,7 +65,7 @@ const getUsersList = async() => {
     axios.get('/get-users').then((response) => {
         usersList.value = response.data.map((user) => ({
             title: user.name,
-            value: user.name
+            value: user.id
         }))
     })
 }
@@ -61,7 +73,7 @@ const getUsersList = async() => {
 
 
 const clearFields = () => {
-    form.thread_type = "";
+    form.type = "";
     form.open_date = "";
     form.title = "";
     form.description = "";
@@ -70,117 +82,28 @@ const clearFields = () => {
     form.date = "";
 }
 
-const usersList = ref([
-    { title: "Shahadh", value: "Shahadh" },
-    { title: "John", value: "John" },
-])
+const usersList = ref([])
 
 const showMemoryThreadFields = ref(false);
 const showKeepSakeFields = ref(false);
 const showTimeCapsuleFields = ref(false);
 
 
-const saveToLocalStorage = () => {
-
-    form.id = Math.floor(Math.random() * 1000);
-
-    form.created_by = localStorage.getItem("currentUser");
-
-    form.created_at = new Date();
-
-    // Retrieve existing thread list from localStorage
-    let threadList = JSON.parse(localStorage.getItem("threadList")) || [];
-
-    // Convert file to Base64 (if there's a file)
-    if (form.file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const fileData = e.target.result;
-
-            // Add file data to the form
-            const threadData = {
-                ...form,
-                file: fileData,
-            };
-
-            // Add the form data to the thread list
-            threadList.push(threadData);
-
-            // Save updated thread list to localStorage
-            localStorage.setItem("threadList", JSON.stringify(threadList));
-
-            // Reset form fields after saving
-            clearFields();
-            alert("Memory item saved successfully!");
-        };
-        reader.readAsDataURL(form.file);
-    } else {
-        // Add form data without file to the thread list
-        threadList.push({ ...form });
-
-        // Save updated thread list to localStorage
-        localStorage.setItem("threadList", JSON.stringify(threadList));
-
-        // Reset form fields after saving
-        clearFields();
-        alert("Memory item saved successfully!");
-    }
-    router.get("/memory-item");
-};
-
-const updateToLocalStorage = () => {
-    // Retrieve existing thread list from localStorage
-    let threadList = JSON.parse(localStorage.getItem("threadList")) || [];
-
-    // Find the index of the item to update
-    const itemIndex = threadList.findIndex(item => item.id === form.id);
-
-    if (itemIndex !== -1) {
-        // Update the item with new values from the form
-        threadList[itemIndex] = {
-            ...threadList[itemIndex], // Retain any existing properties
-            ...form, // Overwrite with updated properties from the form
-        };
-
-        // If there's a file, handle Base64 conversion
-        if (form.file && form.file instanceof File) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                threadList[itemIndex].file = e.target.result; // Update file as Base64
-                // Save updated thread list back to localStorage
-                localStorage.setItem("threadList", JSON.stringify(threadList));
-                alert("Memory item updated successfully!");
-                clearFields();
-                router.get("/memory-item");
-            };
-            reader.readAsDataURL(form.file);
-        } else {
-            // Save updated thread list back to localStorage
-            localStorage.setItem("threadList", JSON.stringify(threadList));
-            alert("Memory item updated successfully!");
-            clearFields();
-            router.get("/memory-item");
-        }
-    } else {
-        alert("Item not found for updating.");
-    }
-};
-
 
 const showAdditionalFields = () => {
     
-    switch (form.thread_type.title) {
-        case "Memory Thread":
+    switch (form.type.value) {
+        case "MemoryThread":
             showMemoryThreadFields.value = !showMemoryThreadFields.value;
             showKeepSakeFields.value = false;
             showTimeCapsuleFields.value = false;
             break;
-        case "Keep Sake":
+        case "Keepsake":
             showMemoryThreadFields.value = false;
             showKeepSakeFields.value = true;
             showTimeCapsuleFields.value = false;
             break;
-        case "Time Capsule":
+        case "TimeCapsule":
             showMemoryThreadFields.value = false;
             showKeepSakeFields.value = false;
             showTimeCapsuleFields.value = true;
@@ -191,38 +114,87 @@ const showAdditionalFields = () => {
             showTimeCapsuleFields.value = false;
             break;
     }
+
+    form.type = form.type.value
 }
 
+watch(
+    () => usersList.value.length,
+    () => {
+        if (usersList.value.length > 0 && form.type == "Keepsake") {
+            let user = usersList.value.find(user => user.value == form.added_by_user_id);
+            if (user) {
+                form.user = user;
+            }
+        }
+    }
+)
+
 onMounted(async() => {
-    const currentItemId = localStorage.getItem('currentEditingItem') || null;
-    if (currentItemId) {
-        
-        const itemToEdit = JSON.parse(localStorage.getItem('threadList')).find(item => item.id == currentItemId);
+    await getUsersList();
+    if (props.memoryItem) {
+        editing.value = true;
+        if(props.memoryItem.type == "MemoryThread") {
+            showMemoryThreadFields.value = !showMemoryThreadFields.value;
+            form.id = props.memoryItem.id;
+            form.type = props.memoryItem.type;
+            form.public = props.memoryItem.public == 1 ? true : false;
+            form.title = props.memoryItem.title;
+            form.description = props.memoryItem.description;
+            form.location = props.memoryItem.memory_thread.location;
+            form.date = props.memoryItem.memory_thread.date;
+            form.added_by_user_id = props.memoryItem.added_by_user_id;
+            if(form.public == false) {
+                form.can_be_viewed_by = JSON.parse(props.memoryItem.can_be_viewed_by);
+            }
+            
+        }
+        else if(props.memoryItem.type == "Keepsake") {
+            showKeepSakeFields.value = true;
+            form.id = props.memoryItem.id;
+            form.type = props.memoryItem.type;
+            form.public = props.memoryItem.public == 1 ? true : false;
+            form.title = props.memoryItem.title;
+            form.description = props.memoryItem.description;
+            form.added_by_user_id = props.memoryItem.added_by_user_id;
+            if(form.public == false) {
+                form.can_be_viewed_by = JSON.parse(props.memoryItem.can_be_viewed_by);
+            }
+            
 
-
-        if (itemToEdit) {
-            form.id = itemToEdit.id;
-            form.thread_type = itemToEdit.thread_type;
-            form.open_date = itemToEdit.open_date;
-            form.title = itemToEdit.title;
-            form.description = itemToEdit.description;
-            form.file = itemToEdit.file;
-            form.location = itemToEdit.location;
-            form.date = itemToEdit.date;
-            form.public = itemToEdit.public;
-            form.canviewbyUsers = itemToEdit.canviewbyUsers;
-            form.created_by = itemToEdit.created_by;
-            form.created_at = itemToEdit.created_at;
-            form.profile_picture = itemToEdit.profile_picture;
-            form.givenFromTo = itemToEdit.givenFromTo;
-            editing.value = true;
+        }else if(props.memoryItem.type == "TimeCapsule") {
+            showTimeCapsuleFields.value = !showTimeCapsuleFields.value;
+            form.id = props.memoryItem.id;
+            form.type = props.memoryItem.type;
+            form.public = props.memoryItem.public == 1 ? true : false;
+            form.title = props.memoryItem.title;
+            form.description = props.memoryItem.description;
+            form.added_by_user_id = props.memoryItem.added_by_user_id;
+            if(form.public == false) {
+                form.can_be_viewed_by = JSON.parse(props.memoryItem.can_be_viewed_by);
+            }
+            form.open_date = props.memoryItem.time_capsule.open_date;
         }
     }
 
-    await getUsersList();
 });
 
 const editing = ref(false);
+
+const date = ref(new Date());
+
+const format = (date) => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+}
+
 
 </script>
 <template>
@@ -231,88 +203,110 @@ const editing = ref(false);
         <form @submit.prevent="submit">
             <v-combobox
                 label="Select a Memory Item Type"
-                v-model="form.thread_type"
+                v-model="form.type"
                 :items="items"
+                item-value="value" 
+                item-text="title" 
                 variant="outlined"
-                class="max-w-xl mt-4 mb-4"
+                :class="['max-w-xl mt-4', $page.props.errors.type ? 'mb-2' : 'mb-8']"
                 id="input-combo1"
                 @update:model-value="showAdditionalFields"
+                v-bind:hide-selected="true"
+                hide-details="auto"
             ></v-combobox>
+            <InputError class="mb-2" :message="$page.props.errors.type" />
             <v-text-field
                 label="Title"
                 variant="outlined"
-                class="max-w-xl mt-4 mb-4"
                 id="input-title"
                 v-model="form.title"
+                :class="['max-w-xl mt-4', $page.props.errors.title ? 'mb-2' : 'mb-8']"
+                hide-details="auto"
             ></v-text-field>
+            <InputError class="mb-2" :message="$page.props.errors.title" />
             <v-textarea
                 label="Description"
                 variant="outlined"
-                class="max-w-xl mt-4 mb-4"
+                :class="['max-w-xl mt-4', $page.props.errors.description ? 'mb-2' : 'mb-8']"
                 id="input-description"
                 v-model="form.description"
+                hide-details="auto"
             ></v-textarea>
+            <InputError class="mb-2" :message="$page.props.errors.description" />
             <template v-if="showMemoryThreadFields">
                 <v-text-field
                     label="Location"
                     variant="outlined"
-                    class="max-w-xl mt-4 mb-4"
+                    :class="['max-w-xl mt-4', $page.props.errors.location ? 'mb-2' : 'mb-8']"
                     id="input-location"
                     v-model="form.location"
+                    hide-details="auto"
                 ></v-text-field>
+                <InputError class="mb-2" :message="$page.props.errors.location" />
                 <VueDatePicker 
-                    class="max-w-xl mt-4 mb-9 border-gray-700"
+                    :class="['max-w-xl mt-4 border-gray-700', $page.props.errors.date ? 'mb-2' : 'mb-8']"
                     placeholder="Date"    
-                    v-model="form.open_date"
+                    v-model="form.date"
                 ></VueDatePicker>
-                
+                <InputError class="mb-2" :message="$page.props.errors.date" />
             </template>
 
             <template v-else-if="showKeepSakeFields">
                 <v-combobox
                     label="Given To"
-                    v-model="form.givenFromTo"
+                    v-model="form.user"
+                    item-value="value" 
+                    item-text="title"
                     :items="usersList"
                     variant="outlined"
-                    class="max-w-xl mt-4 mb-4"
+                    :class="['max-w-xl mt-4', $page.props.errors.given_to_user_id ? 'mb-2' : 'mb-8']"
                     id="input-combo3"
+                    hide-details="auto"
                 ></v-combobox>
+                <InputError class="mb-2" :message="$page.props.errors.given_to_user_id" />
             </template>
 
             <template v-else-if="showTimeCapsuleFields">
                 <VueDatePicker 
-                    class="max-w-xl mt-4 mb-4 border-gray-700"
-                    placeholder="Select a date to open the time capsule"    
+                    :class="['max-w-xl mt-4 border-gray-700', $page.props.errors.open_date ? 'mb-2' : 'mb-8']"
+                    placeholder="Select a date to open the TimeCapsule"    
                     v-model="form.open_date"
                 ></VueDatePicker>
+                <InputError class="mb-2" :message="$page.props.errors.open_date" />
             </template>
             <v-file-input 
-                label="File input" 
-                class="max-w-xl mt-4 mb-4" 
+                label="File input"  
+                :class="['max-w-xl mt-4 border-gray-700', $page.props.errors.file ? 'mb-2' : 'mb-8']"
                 variant="outlined" 
                 id="input-file"
                 accept="image/*, video/*"
                 @input="form.file = $event.target.files[0]"
                 @click:clear="form.file = null"
+                hide-details="auto"
             ></v-file-input>
-
-            <v-checkbox label="Public" v-model="form.public"></v-checkbox>
+            <InputError class="mb-2" :message="$page.props.errors.file" />
+            <v-checkbox label="Public" v-model="form.public" hide-details="auto"></v-checkbox>
 
             <v-combobox
                 label="Select users who can view"
-                v-model="form.canviewbyUsers"
+                v-model="form.can_be_viewed_by"
                 :items="usersList"
+                item-value="value"
+                item-text="title"
                 variant="outlined"
-                class="max-w-xl mt-4 mb-4"
+                :class="['max-w-xl mt-4 border-gray-700', $page.props.errors.can_be_viewed_by ? 'mb-2' : 'mb-8']"
                 id="input-combo1"
                 multiple
                 chips
                 v-if="!form.public"
+                v-bind:hide-selected="true"
+                hide-details="auto"
             ></v-combobox>
+            <InputError class="mb-2" :message="$page.props.errors.can_be_viewed_by" v-if="!form.public" />
             <div class="flex justify-end max-w-xl">
                 <SecondaryButton class="mt-4" @click="navigateToMain"> Cancel </SecondaryButton>
-                <PrimaryButton class="mt-4 ml-4 rounded-lg" @click="saveToLocalStorage" v-if="!editing"> Save </PrimaryButton>
-                <PrimaryButton class="mt-4 ml-4 rounded-lg" @click="updateToLocalStorage" v-else-if="editing"> Update </PrimaryButton>
+                <PrimaryButton class="mt-4 ml-4 rounded-lg" type="submit" v-if="!editing"> Save </PrimaryButton>
+                <PrimaryButton class="mt-4 ml-4 rounded-lg" type="submit" v-else-if="editing"> Update </PrimaryButton>
             </div>
         </form>
     </div>

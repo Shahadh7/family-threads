@@ -6,24 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('time_capsules', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->foreignId('item_id')->constrained('memory_items')->onDelete('cascade'); // Memory item link
+            $table->id();
+            $table->foreignId('memory_item_id')->constrained('memory_items')->onDelete('cascade'); // Link to memory items
             $table->timestamp('open_date');
-            $table->boolean('notification_sent')->default(false);
-            $table->enum('status', ['Locked', 'Opened']);
+            $table->enum('status', ['Locked', 'Opened'])->default('Locked');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('time_capsules');

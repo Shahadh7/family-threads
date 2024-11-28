@@ -11,23 +11,8 @@ import SideBarItem from "@/Components/SideBarItem.vue";
 
 const showingNavigationDropdown = ref(false);
 
-const props = defineProps({
-    image: {
-        type: String,
-        default: "", // Default to empty string if no image is provided
-    },
-    name: {
-        type: String,
-        required: true, // Ensure a name is always provided
-        default: "User",
-    },
-});
 
 const imageAvailable = ref(true);
-
-const firstLetter = computed(() => {
-    return props.name.charAt(0).toUpperCase(); // Get the first letter of the name
-});
 
 // Handle image error by showing the first letter instead
 const handleImageError = () => {
@@ -45,15 +30,15 @@ const currentActive = ref("Home");
                 <div class="w-full px-4 sm:px-6 lg:px-8 mt-3">
                     <div class="flex h-16 justify-between">
                         <ApplicationLogo />
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div class="hidden sm:ms-6 sm:flex sm:items-center cursor-pointer">
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
-                                            <template v-if="image">
+                                            <template v-if="$page.props.auth.user.profile_picture !== null">
                                                 <img
-                                                    :src="image"
+                                                    :src="$page.props.auth.user.profile_picture"
                                                     alt="Avatar"
                                                     class="h-14 w-14 rounded-full object-cover border-4 border-solid border-black"
                                                     @error="handleImageError"
@@ -63,7 +48,7 @@ const currentActive = ref("Home");
                                                 <span
                                                     class="h-14 w-14 rounded-full flex items-center justify-center bg-gray-500 text-white font-bold border-4 border-solid border-black"
                                                 >
-                                                    {{ firstLetter }}
+                                                    {{ $page.props.auth.user.name.charAt(0).toUpperCase() }}
                                                 </span>
                                             </template>
                                         </span>

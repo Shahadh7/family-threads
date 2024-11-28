@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('memory_items', function (Blueprint $table) {
             $table->id(); // Primary key
-            $table->foreignId('thread_id')->constrained('memory_threads')->onDelete('cascade'); // Thread link
-            $table->foreignId('added_by_user_id')->constrained('users')->onDelete('cascade'); // User link
+            $table->foreignId('added_by_user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('family_id')->constrained('families')->onDelete('cascade');
+            $table->string('title');
             $table->text('description')->nullable();
             $table->timestamp('date_added')->useCurrent();
+            $table->enum('type', ['MemoryThread', 'TimeCapsule', 'Keepsake']);
+            $table->foreignId('file_id')->nullable()->constrained('files')->onDelete('cascade');
+            $table->boolean('public')->default(false);
             $table->timestamps();
         });
     }

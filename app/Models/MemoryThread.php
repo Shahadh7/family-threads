@@ -10,12 +10,9 @@ class MemoryThread extends Model
     use HasFactory;
 
     protected $fillable = [
-        'family_id',
-        'created_by_user_id',
-        'title',
-        'description',
-        'thread_type',
-        'tags',
+        'location',
+        'date',
+        'memory_item_id'
     ];
 
     public function family()
