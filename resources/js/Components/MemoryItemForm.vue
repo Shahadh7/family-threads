@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref, watch } from "vue";
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import PrimaryButton from "@/Components/PrimaryButton.vue";

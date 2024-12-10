@@ -30,9 +30,8 @@ const toggleLike = (item) => {
     item.liked = !item.liked; // Toggle the liked state
 };
 
-// Update remaining time for all "Time Capsule" itemsconst updateTimeCapsules = () => {
 const updateTimeCapsules = () => {
-    let allExpired = true; // Flag to check if all time capsules have expired
+    let allExpired = true; 
 
     AllItems.value.forEach((item) => {
         if (item.type === "TimeCapsule") {
@@ -41,10 +40,10 @@ const updateTimeCapsules = () => {
             const diff = openDate.diff(now);
 
             if (diff <= 0) {
-                timeExpiredMap.value[item.id] = true; // Mark as expired
+                timeExpiredMap.value[item.id] = true;
                 timeRemainingMap.value[item.id] = "Expired";
             } else {
-                allExpired = false; // If any item is not expired, keep checking
+                allExpired = false;
                 timeExpiredMap.value[item.id] = false;
                 const duration = moment.duration(diff);
                 const days = Math.floor(duration.asDays());
@@ -61,13 +60,12 @@ const updateTimeCapsules = () => {
     // Stop the interval when all time capsules are expired
     if (allExpired) {
         clearInterval(intervalId.value);
-        intervalId.value = null; // Clear the interval ID to indicate it's stopped
+        intervalId.value = null; 
     }
 };
 
-// Fetch thread list from localStorage on component mount
 onMounted(async () => {
-    updateTimeCapsules(); // Initial update
+    updateTimeCapsules();
     intervalId.value = setInterval(updateTimeCapsules, 1000);
 });
 

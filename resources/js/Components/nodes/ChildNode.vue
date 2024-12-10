@@ -1,4 +1,3 @@
-<!-- src/components/nodes/ChildNode.vue -->
 <template>
   <div class="node-container">
     <!-- Input Handles for Parents -->

@@ -14,7 +14,9 @@ class UserController extends Controller
 
         if ($request->wantsJson()) {
             $currentUserFamilyId = auth()->user()->family_id;
-            $users = User::where('family_id', $currentUserFamilyId)->get();
+            $users = User::where('family_id', $currentUserFamilyId)
+                ->whereNot('id', auth()->user()->id)->get();
+            
             return response()->json($users);
         }
         
