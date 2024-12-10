@@ -15,7 +15,7 @@
             :fit-view="true"
             @connect="onConnect"
           >
-            <Panel class="absolute top-3 right-3">
+            <Panel class="absolute top-3 right-3" v-if="$page.props.auth.user.role === 'family_admin'">
               <div class="flex gap-4 flex-col">
                 <button
                   v-for="node in listNodes"
