@@ -178,7 +178,7 @@ function handleImageError() {
                                 v-model="form.password_confirmation"
                                 :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="show2 ? 'text' : 'password'"
-                                label="Password"
+                                label="Confirmation Password"
                                 name="input-password"
                                 @click:append="show2 = !show2"
                                 variant="outlined"
