@@ -57,7 +57,7 @@ const team = [
     {
         id: 2,
         name: "Naqash",
-        image: "/images/shahadh.png",
+        image: "/images/naqash.png",
         title: "UI/UX Designer & Developer",
         description:
             "Naqash is a skilled developer with expertise in UI/UX design and web development, as well as desktop application development using C#. With a strong eye for detail and a focus on user-centered design, Naqash brings thoughtful, effective solutions to each project. Currently pursuing an external degree in Information Technology at the University of Moratuwa, Naqash is committed to continuous learning and professional growth. Driven by a passion for technology and design, Naqash aims to create impactful digital experiences that prioritize both functionality and aesthetics.",
@@ -65,7 +65,7 @@ const team = [
     {
         id: 3,
         name: "Mohamed Haseef",
-        image: "/images/shahadh.png",
+        image: "/images/haseef.png",
         title: "Developer",
         description:
             "Mohamed Haseef is a versatile developer with the ability to build both desktop and web applications. With a strong foundation in programming and a commitment to delivering effective solutions, he approaches each project with attention to detail and a focus on quality. Currently pursuing an external degree in Information Technology at the University of Moratuwa, Haseef is dedicated to expanding his knowledge and skills in the tech field. His goal is to create applications that are both functional and user-friendly, making a positive impact through technology.",
@@ -299,8 +299,8 @@ function handleImageError() {
                                 :src="item.image"
                                 alt="team-player"
                                 style="
-                                    width: 80%;
-                                    height: 80%;
+                                    width: 5000px;
+                                    height: 600px;
                                     object-fit: contain;
                                 "
                             />
