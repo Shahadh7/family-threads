@@ -46,13 +46,13 @@ class DashboardController extends Controller
             $memoryItems = MemoryItem::where(function ($query) use ($familyId, $currentUserId) {
                 // Condition 1: Public items viewable by all family members
                 $query->where('family_id', $familyId)
-                    ->where('public', true);
+                    ->where('public', 1);
 
                 // Condition 2: Private items where the current user is in `can_be_viewed_by`
                 $query->orWhere(function ($q) use ($familyId, $currentUserId) {
                     $q->where('family_id', $familyId)
-                    ->where('public', false)
-                    ->whereJsonContains('can_be_viewed_by', [['value' => $currentUserId]]);
+                    ->where('public', 0)
+                    ->where('can_be_viewed_by', 'like', '%"value":"'.$currentUserId.'"%');
                 });
 
                 // Condition 3: Items added by the current user
@@ -63,6 +63,7 @@ class DashboardController extends Controller
                 $query->where('type', $tag);
             })
             ->with(['file', 'memoryThread', 'timeCapsule', 'keepSake.passedOnUser', 'user'])
+            ->orderBy('created_at', 'desc')
             ->get();
 
             return response()->json($memoryItems);

@@ -1,4 +1,3 @@
-<!-- src/components/nodes/FemaleNode.vue -->
 <template>
   <div class="node-container">
     <!-- Output Handle for Connecting to Child -->

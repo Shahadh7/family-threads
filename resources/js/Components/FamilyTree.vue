@@ -15,7 +15,7 @@
             :fit-view="true"
             @connect="onConnect"
           >
-            <Panel class="absolute top-3 right-3">
+            <Panel class="absolute top-3 right-3" v-if="$page.props.auth.user.role === 'family_admin'">
               <div class="flex gap-4 flex-col">
                 <button
                   v-for="node in listNodes"
@@ -34,7 +34,6 @@
               <v-btn color="secondary" @click="exportTree">Export</v-btn>
               <v-btn color="secondary" @click="saveTree" v-if="!props.treeData && $page.props.auth.user.role === 'family_admin'">Save</v-btn>
               <v-btn color="secondary" @click="updateTree" v-if="props.treeData && $page.props.auth.user.role === 'family_admin'">Update</v-btn>
-              <!-- <v-btn color="secondary" @click="loadTree">Load</v-btn> -->
             </div>
           </VueFlow>
         </div>
@@ -182,10 +181,8 @@ const addNode = (type, x, y) => {
 const onConnect = (connection) => {
   const { source, target } = connection
 
-  // Determine the relationship based on the source node type
   const sourceNode = nodes.value.find((n) => n.id === source)
 
-  // Add the new edge to the edges array with a label and style
   const newEdge = {
     id: uuidv4(),
     ...connection,
@@ -250,19 +247,6 @@ const updateTree = () => {
   }
   router.put('/family-tree', {tree_data: JSON.stringify(family_tree)})
   showSnackbar('Family tree updated successfully!')
-}
-
-// Load from Local Storage
-const loadTree = () => {
-  const savedData = localStorage.getItem('familyTree')
-  if (savedData) {
-    const parsedData = JSON.parse(savedData)
-    nodes.value = parsedData.nodes || []
-    edges.value = parsedData.edges || []
-    showSnackbar('Family tree loaded from local storage!')
-  } else {
-    showSnackbar('No saved family tree found.')
-  }
 }
 
 // Snackbar Function
