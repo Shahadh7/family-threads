@@ -22,7 +22,7 @@ class TimeThreadController extends Controller
             $query->orWhere(function ($q) use ($family_id, $current_user_id) {
                 $q->where('family_id', $family_id)
                 ->where('public', 0)
-                ->where('can_be_viewed_by', 'like', '%"value":"'.$current_user_id.'"%');
+                ->whereRaw('JSON_CONTAINS(can_be_viewed_by, \'{"value": "'.$current_user_id.'"}\')');
             });
 
             // Condition 3: Items added by the current user
